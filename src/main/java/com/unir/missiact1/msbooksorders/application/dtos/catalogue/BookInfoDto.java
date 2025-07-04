@@ -4,12 +4,17 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BookInfoDto {
     private UUID id;
     private String title;
     private BigDecimal price;
     private String isbn;
     private LocalDate publicationDate;
+    private String coverImage;
+    
     
     // getters y setters
     public UUID getId() { return id; }
@@ -22,4 +27,6 @@ public class BookInfoDto {
     public void setIsbn(String isbn) { this.isbn = isbn; }
     public LocalDate getPublicationDate() { return publicationDate; }
     public void setPublicationDate(LocalDate publicationDate) { this.publicationDate = publicationDate; }
+    public String getCoverImage() { return coverImage; }
+    public void setCoverImage(String coverImage) { this.coverImage = coverImage; }
 }
