@@ -6,9 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.unir.missiact1.msbooksorders.application.dtos.*;
+import com.unir.missiact1.msbooksorders.application.services.implementations.ICreateCartService;
 import com.unir.missiact1.msbooksorders.commons.responses.ApiResponse;
 import com.unir.missiact1.msbooksorders.commons.responses.ApiResponseHelper;
-import com.unir.missiact1.msbooksorders.infraestructure.repository.implementations.CartService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,30 +18,30 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping(path = "/v1/api/carts", headers = "X-Api-Version=1")
 public class CartControllerV1 {
-    private final CartService service;
+    private final ICreateCartService service;
 
-    public CartControllerV1(CartService service) {
+    public CartControllerV1(ICreateCartService service) {
         this.service = service;
     }
 
-    @GetMapping("/{customerId}")
+    @GetMapping("/get-cart/{customerId}")
     @Operation(summary = "Obtener carrito", description = "Recupera el carrito de un cliente")
     public ResponseEntity<ApiResponse<CartDto>> getCart(@PathVariable UUID customerId) {
-        CartDto dto = service.getCart(customerId);
+        CartDto dto = service.getOrCreateCart(customerId);
         return ResponseEntity.ok(ApiResponseHelper.createSuccessResponse(dto));
     }
 
-    @PostMapping("/{customerId}/items")
+    @PostMapping("/add-item/{customerId}/items")
     @Operation(summary = "Añadir ítem", description = "Agrega un ítem al carrito")
     public ResponseEntity<ApiResponse<CartDto>> addItem(
             @PathVariable UUID customerId,
             @Valid @RequestBody CartItemRequest req) {
         CartDto dto = service.addItem(customerId, req);
         return ResponseEntity.status(HttpStatus.CREATED)
-            .body(ApiResponseHelper.createSuccessResponse(dto, "Ítem añadido al carrito"));
+                .body(ApiResponseHelper.createSuccessResponse(dto, "Ítem añadido al carrito"));
     }
 
-    @PutMapping("/{customerId}/items")
+    @PutMapping("/update-item/{customerId}/items")
     @Operation(summary = "Actualizar ítem", description = "Modifica la cantidad y precio de un ítem")
     public ResponseEntity<ApiResponse<CartDto>> updateItem(
             @PathVariable UUID customerId,
@@ -50,7 +50,7 @@ public class CartControllerV1 {
         return ResponseEntity.ok(ApiResponseHelper.createSuccessResponse(dto, "Ítem actualizado"));
     }
 
-    @DeleteMapping("/{customerId}/items/{bookId}")
+    @DeleteMapping("/remove-item/{customerId}/items/{bookId}")
     @Operation(summary = "Eliminar ítem", description = "Elimina un ítem del carrito")
     public ResponseEntity<ApiResponse<CartDto>> removeItem(
             @PathVariable UUID customerId,
@@ -59,10 +59,19 @@ public class CartControllerV1 {
         return ResponseEntity.ok(ApiResponseHelper.createSuccessResponse(dto, "Ítem eliminado"));
     }
 
-    @DeleteMapping("/{customerId}")
+    @DeleteMapping("/clear-cart/{customerId}")
     @Operation(summary = "Vaciar carrito", description = "Elimina todos los ítems del carrito")
     public ResponseEntity<ApiResponse<String>> clearCart(@PathVariable UUID customerId) {
         service.clearCart(customerId);
         return ResponseEntity.ok(ApiResponseHelper.createSuccessResponse(null, "Carrito vaciado"));
+    }
+
+    @PatchMapping("/decrement-item/{customerId}/items/{bookId}")
+    @Operation(summary = "Decrementar ítem", description = "Resta 1 a la cantidad de un ítem; si llega a 0 lo elimina.")
+    public ResponseEntity<ApiResponse<CartDto>> decrementItem(
+            @PathVariable UUID customerId,
+            @PathVariable UUID bookId) {
+        CartDto dto = service.decrementItem(customerId, bookId);
+        return ResponseEntity.ok(ApiResponseHelper.createSuccessResponse(dto, "Cantidad decrementada"));
     }
 }
