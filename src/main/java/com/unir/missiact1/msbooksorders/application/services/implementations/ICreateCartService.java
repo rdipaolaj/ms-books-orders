@@ -10,4 +10,5 @@ public interface ICreateCartService {
     CartDto updateItem(UUID customerId, CartItemRequest req);
     CartDto removeItem(UUID customerId, UUID bookId);
     void clearCart(UUID customerId);
+    CartDto decrementItem(UUID customerId, UUID bookId);
 }

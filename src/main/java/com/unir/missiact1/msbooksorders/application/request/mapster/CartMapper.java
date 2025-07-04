@@ -1,5 +1,6 @@
 package com.unir.missiact1.msbooksorders.application.request.mapster;
 
+import java.math.BigDecimal;
 import java.util.stream.Collectors;
 import com.unir.missiact1.msbooksorders.application.dtos.*;
 import com.unir.missiact1.msbooksorders.domain.*;
@@ -21,6 +22,10 @@ public class CartMapper {
             i.setSubtotal(item.getSubtotal());
             return i;
         }).collect(Collectors.toList()));
+        BigDecimal total = d.getItems().stream()
+                .map(CartItemDto::getSubtotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        d.setTotal(total);
         return d;
     }
 }

@@ -38,7 +38,7 @@ public class CartControllerV1 {
             @Valid @RequestBody CartItemRequest req) {
         CartDto dto = service.addItem(customerId, req);
         return ResponseEntity.status(HttpStatus.CREATED)
-            .body(ApiResponseHelper.createSuccessResponse(dto, "Ítem añadido al carrito"));
+                .body(ApiResponseHelper.createSuccessResponse(dto, "Ítem añadido al carrito"));
     }
 
     @PutMapping("/update-item/{customerId}/items")
@@ -64,5 +64,14 @@ public class CartControllerV1 {
     public ResponseEntity<ApiResponse<String>> clearCart(@PathVariable UUID customerId) {
         service.clearCart(customerId);
         return ResponseEntity.ok(ApiResponseHelper.createSuccessResponse(null, "Carrito vaciado"));
+    }
+
+    @PatchMapping("/decrement-item/{customerId}/items/{bookId}")
+    @Operation(summary = "Decrementar ítem", description = "Resta 1 a la cantidad de un ítem; si llega a 0 lo elimina.")
+    public ResponseEntity<ApiResponse<CartDto>> decrementItem(
+            @PathVariable UUID customerId,
+            @PathVariable UUID bookId) {
+        CartDto dto = service.decrementItem(customerId, bookId);
+        return ResponseEntity.ok(ApiResponseHelper.createSuccessResponse(dto, "Cantidad decrementada"));
     }
 }
