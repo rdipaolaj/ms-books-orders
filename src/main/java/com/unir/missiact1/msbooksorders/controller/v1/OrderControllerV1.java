@@ -42,7 +42,7 @@ public class OrderControllerV1 {
             .body(ApiResponseHelper.createSuccessResponse(created, "Pedido creado correctamente"));
     }
 
-    @GetMapping("/findById/{id}")
+    @GetMapping("/find-by-id/{id}")
     @Operation
     (
       summary     = "Obtener pedido",
@@ -54,7 +54,7 @@ public class OrderControllerV1 {
         return ResponseEntity.ok(ApiResponseHelper.createSuccessResponse(dto));
     }
 
-    @GetMapping("/findAll")
+    @GetMapping("/find-all")
     @Operation
     (
       summary     = "Listar pedidos",
