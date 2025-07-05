@@ -16,9 +16,6 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:24-jre AS runtime
 WORKDIR /app
 
-ENV PORT=8081
-EXPOSE 8081
-
 COPY --from=builder /app/target/ms-books-orders-0.0.1-SNAPSHOT.jar app.jar
 
 ENTRYPOINT ["java","-Djava.net.preferIPv4Stack=true","-jar","/app/app.jar"]
