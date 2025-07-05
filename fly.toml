@@ -11,15 +11,11 @@ primary_region = 'bog'
 
 [env]
   EUREKA_URL            = "https://eureka-server.fly.dev/eureka"
-  MYSQLHOST             = "tu-host-mysql"
-  MYSQLPORT             = "3306"
+  MYSQLHOST             = "switchyard.proxy.rlwy.net"
+  MYSQLPORT             = "14587"
   MYSQLDATABASE         = "booksorders"
   MYSQLUSER             = "root"
-  MYSQLPASSWORD         = "admin"
-  CLOUDINARY_CLOUD_NAME = "Root"
-  CLOUDINARY_API_KEY    = "492862172338955"
-  CLOUDINARY_API_SECRET = "Nbm5bttZ-FvCPkG_USAQSCMdhEs"
-  ELASTICSEARCH_URI     = "https://elastic:HYH9SNSckXzLnoCtYpFWkL0R@263359fdf7d14b31a87a4e06893f55ff.us-central1.gcp.cloud.es.io:443"
+  MYSQLPASSWORD         = "bDxtRHQYAdgdEfnowjpnjubJFymcXmsM"
 
 [http_service]
   internal_port = 8081
